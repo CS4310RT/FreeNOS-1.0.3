@@ -20,20 +20,20 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
-#include "Sleep.h"
+#include "Wait.h"
 
-Sleep::Sleep(int argc, char **argv)
+Wait::Wait(int argc, char **argv)
     : POSIXApplication(argc, argv)
 {
     parser().setDescription("Stop executing for some time");
     parser().registerPositional("SECONDS", "Stop executing for the given number of seconds");
 }
 
-Sleep::~Sleep()
+Wait::~Wait()
 {
 }
 
-Sleep::Result Sleep::exec()
+Wait::Result Wait::exec()
 {
     int sec = 0;
 
@@ -44,10 +44,10 @@ Sleep::Result Sleep::exec()
         return InvalidArgument;
     }
 
-    // Sleep now
-    if (sleep(sec) != 0)
+    // Wait now
+    if (wait(sec) != 0)
     {
-        ERROR("failed to sleep: " << strerror(errno));
+        ERROR("failed to wait: " << strerror(errno));
         return IOError;
     }
 

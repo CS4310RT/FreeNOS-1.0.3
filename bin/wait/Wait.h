@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __BIN_SLEEP_SLEEP_H
-#define __BIN_SLEEP_SLEEP_H
+#ifndef __BIN_WAIT_WAIT_H
+#define __BIN_WAIT_WAIT_H
 
 #include <POSIXApplication.h>
 
@@ -28,7 +28,7 @@
 /**
  * Stop executing for some time.
  */
-class Sleep : public POSIXApplication
+class Wait : public POSIXApplication
 {
   public:
 
@@ -38,12 +38,12 @@ class Sleep : public POSIXApplication
      * @param argc Argument count
      * @param argv Argument values
      */
-    Sleep(int argc, char **argv);
+    Wait(int argc, char **argv);
 
     /**
      * Destructor
      */
-    virtual ~Sleep();
+    virtual ~Wait();
 
     /**
      * Execute the application.
@@ -57,4 +57,4 @@ class Sleep : public POSIXApplication
  * @}
  */
 
-#endif /* __BIN_SLEEP_SLEEP_H */
+#endif /* __BIN_WAIT_WAIT_H */
