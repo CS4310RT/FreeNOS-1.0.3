@@ -20,13 +20,15 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
+#include <sys/wait.h>
 #include "Wait.h"
+#include "POSIXApplication.h"
 
 Wait::Wait(int argc, char **argv)
     : POSIXApplication(argc, argv)
 {
-    parser().setDescription("Stop executing for some time");
-    parser().registerPositional("SECONDS", "Stop executing for the given number of seconds");
+    parser().setDescription("Wait for a process with the given PID to terminate");
+    parser().registerPositional("PID", "The PID of the process to wait for");
 }
 
 Wait::~Wait()
@@ -35,21 +37,22 @@ Wait::~Wait()
 
 Wait::Result Wait::exec()
 {
-    int sec = 0;
+    int pid_ = atoi(arguments().get("PID"));
 
-    // Convert input to seconds
-    if ((sec = atoi(arguments().get("SECONDS"))) <= 0)
+    if (pid_ <= 0)
     {
-        ERROR("invalid sleep time `" << arguments().get("SECONDS") << "'");
+        ERROR("invalid PID: " << arguments().get("PID"));
         return InvalidArgument;
     }
 
     // Wait now
-    if (wait(sec) != 0)
+    if (waitpid(pid_, &pid_, 0) == -1)
     {
-        ERROR("failed to wait: " << strerror(errno));
+        ERROR("failed to wait for PID: " << pid_ << ":" << strerror(errno));
         return IOError;
     }
+    
+    INFO("Process " << pid_ << " has terminated.");
 
     // Done
     return Success;
