@@ -17,7 +17,6 @@
 
 #ifndef __BIN_RENICE_RENICE_H
 #define __BIN_RENICE_RENICE_H
-#include <sys/types.h>
 #include <POSIXApplication.h>
 
 /**
@@ -40,7 +39,6 @@ class Renice : public POSIXApplication
      */
     Renice(int argc, char **argv);
 
-    virtual ~Renice();
 
     /**
      * Execute the application.
