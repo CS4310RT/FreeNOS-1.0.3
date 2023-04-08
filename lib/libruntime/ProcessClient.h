@@ -71,8 +71,6 @@ class ProcessClient
 
   public:
 
-    void setPriority(const ProcessID pid, int priority);
-    
     /**
      * Get current process identifier
      *
