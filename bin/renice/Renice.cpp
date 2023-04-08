@@ -18,24 +18,47 @@
 #include <Types.h>
 #include <Macros.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <ProcessClient.h>
+// #include <../bin/ps/ProcessList.h>
 #include "Renice.h"
 
 Renice::Renice(int argc, char **argv)
     : POSIXApplication(argc, argv)
 {
-    parser().setDescription("");
-    parser().registerFlag('l', "level", "Lists priority level of processes");
+    parser().setDescription("Alter the priority of running processes");
+    parser().registerPositional("PRIORITY", "priority value to be used to alter scheduling");
+    parser().registerPositional("PROCESS", "process ID to run at new scheduled priority");
+    parser().registerFlag('n', "nice", "Schedule process with specified priority");
 }
-
-Renice::~Renice(){}
 
 Renice::Result Renice::exec()
 {
-    const ProcessClient process;
+    u8 priority;
+    unsigned int PID;
 
-    // Output the table
+    if (arguments().get("nice")) {
+        priority = atoi(arguments().get("PRIORITY"));
+        PID = atoi(arguments().get("PROCESS"));
+    }
+    
+    ProcessClient process;
+
+    // Loop processes
+    for (ProcessID pid = 0; pid < ProcessClient::MaximumProcesses; pid++)
+    {
+        ProcessClient::Info info;
+
+        const ProcessClient::Result result = process.processInfo(pid, info);
+
+        if (result == ProcessClient::Success)
+        {   
+            if (pid == PID) {
+                process.changePriorityLevel(pid, info, priority);
+            }
+        }
+    }
+
     return Success;
 }
-
