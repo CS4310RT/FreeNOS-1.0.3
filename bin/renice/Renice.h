@@ -40,6 +40,8 @@ class Renice : public POSIXApplication
      */
     Renice(int argc, char **argv);
 
+    virtual ~Renice();
+
     /**
      * Execute the application.
      *
