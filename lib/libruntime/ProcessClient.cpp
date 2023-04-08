@@ -44,6 +44,7 @@ ProcessClient::Result ProcessClient::processInfo(const ProcessID pid,
         "Waiting",
         "Stopped"
     };
+    u8 priorityLevels[] = {1, 2, 3, 4, 5};
     const Arch::MemoryMap map;
     const Memory::Range range = map.range(MemoryMap::UserArgs);
     char cmd[128];
@@ -68,6 +69,7 @@ ProcessClient::Result ProcessClient::processInfo(const ProcessID pid,
     // Fill output
     info.command = cmd;
     info.textState = (pid == m_pid ? "Running" : textStates[info.kernelState.state]);
+    info.priorityLevel = priorityLevels[info.kernelState.priority - 1];
 #endif /* __HOST__ */
 
     return Success;
@@ -102,4 +104,10 @@ ProcessID ProcessClient::findProcess(const String program) const
     {
         return ANY;
     }
+}
+
+void ProcessClient::changePriorityLevel(const ProcessID pid, ProcessClient::Info &info, u8 priority)
+{
+    info.kernelState.priority = priority;
+    const API::Result result = ProcessCtl(pid, ChangePriority, (Address) &info.kernelState);
 }
