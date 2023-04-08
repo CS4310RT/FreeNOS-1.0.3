@@ -26,16 +26,31 @@ Renice::Renice(int argc, char **argv)
     : POSIXApplication(argc, argv)
 {
     parser().setDescription("");
-    parser().registerFlag('l', "level", "Lists priority level of processes");
+    parser().registerFlag('n', "new", "Priority to be used with scheduled process");
+    parser().registerPositional("PRIORITY", "Priority level for process");
+    parser().registerPositional("PROCESSID", "Processes ID for process");
+
 }
 
 Renice::~Renice(){}
 
 Renice::Result Renice::exec()
 {
-    const ProcessClient process;
+    if(arguments().get("new")){
 
-    // Output the table
-    return Success;
+        ProcessClient process;
+        int priority = atoi(arguments().get("PRIORITY"));
+        ProcessID pid = atoi(arguments().get("PROCESSID"));
+
+        if (priority > 5 || priority < 1) {
+            return InvalidArgument;
+        }
+
+        process.setPriorty(pid, priority)
+
+        return Success;
+    }
+
+    return InvalidArgument;
 }
 
