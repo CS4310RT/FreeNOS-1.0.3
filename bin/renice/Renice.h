@@ -45,7 +45,7 @@ class Renice : public POSIXApplication
      *
      * @return Result code
      */
-    virtual Renice exec();
+    virtual Result exec();
 };
 
 /**
