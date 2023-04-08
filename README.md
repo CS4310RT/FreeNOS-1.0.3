@@ -9,7 +9,7 @@ Timothy Huang
 
 Contributions:
 =====
-Renato Safra: Renice application, FreeNOS kernel and system liraries support.
+Renato Safra: Renice application, FreeNOS kernel and system libraries support.
 
 Timothy Huang: Implement and setup priority branch, ps -l, sc files, and renice.
 
