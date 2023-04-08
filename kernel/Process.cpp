@@ -31,6 +31,7 @@ Process::Process(ProcessID id, Address entry, bool privileged, const MemoryMap &
     m_waitId        = 0;
     m_waitResult    = 0;
     m_wakeups       = 0;
+    m_priorityLevel = 3;
     m_entry         = entry;
     m_privileged    = privileged;
     m_memoryContext = ZERO;
@@ -105,6 +106,16 @@ bool Process::isPrivileged() const
 void Process::setParent(ProcessID id)
 {
     m_parent = id;
+}
+
+u8 Process::getPriorityLevel() const
+{
+    return m_priorityLevel;
+}
+
+void Process::setPriorityLevel(u8 priority) 
+{
+    m_priorityLevel = priority;
 }
 
 Process::Result Process::wait(ProcessID id)
